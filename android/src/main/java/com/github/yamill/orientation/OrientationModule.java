@@ -146,8 +146,13 @@ public class OrientationModule extends ReactContextBaseJavaModule implements Lif
     public void onHostResume() {
         final Activity activity = getCurrentActivity();
 
-        assert activity != null;
-        activity.registerReceiver(receiver, new IntentFilter("onConfigurationChanged"));
+        if (activity == null) return;
+        try {
+            activity.registerReceiver(receiver, new IntentFilter("onConfigurationChanged"));
+        }
+        catch (Exception e) {
+            FLog.e(ReactConstants.TAG, "error registering receiver", e);
+        }
     }
     @Override
     public void onHostPause() {
